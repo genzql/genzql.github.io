@@ -7,9 +7,10 @@
 #### Conversion
 
 - Converts code on-demand
-- Converts SQL from a specified dialect to zql
-- After conversion to zql, converts zql to DuckDB
-- Returns an error if conversion from zql to DuckDB fails
+- Converts from SQL of a given dialect to zql
+- Converts from zql to SQL of a given dialect
+- Converts zql to DuckDB for execution
+- Returns an error if conversion fails
 - Stretches: Converts partial code, even if the SQL statement is not complete
 
 #### Execution
@@ -21,18 +22,16 @@
 
 #### Dialects
 
-- Converts using the dialect specified, if any
-- Converts using the detected dialect, if no dialect specified
-- Shows an error if no dialect was specified and dialect could not be detected
-
-#### Dialect Support
-
-- Supports converting from zql to DuckDB
-- Supports converting from the following SQL dialects to zql:
+- Supports converting to and from the following SQL dialects:
+  - zql
   - PostgreSQL
   - MySQL
   - DuckDB SQL
   - ClickHouse SQL
+- Converts to zql using the specified source dialect, if any
+- Converts to zql using the detected source dialect, if no specified source dialect
+- Requires a specified target dialect when converting from zql
+- Shows an error if no dialect was specified and dialect could not be detected
 
 ### Surfaces
 
