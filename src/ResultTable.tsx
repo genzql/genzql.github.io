@@ -54,7 +54,9 @@ const ResultTable: React.FC<ResultTableProps> = ({ result }) => {
                     key={cellIndex}
                     style={{ border: "1px solid orange", padding: "8px" }}
                   >
-                    {value}
+                    {typeof value === "string" || typeof value === "number"
+                      ? value
+                      : String(value)}
                   </td>
                 ))}
               </tr>
