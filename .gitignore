@@ -134,3 +134,6 @@ out
 
 # Mac OS
 .DS_Store
+
+# Tree Sitter
+src/tree_sitter/**
