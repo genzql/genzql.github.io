@@ -8,7 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "tree-sitter": "tree-sitter"
+    "tree-sitter": "tree-sitter",
+    "tsg": "tree-sitter generate grammars/baseSql.js",
+    "tsp": "tree-sitter parse",
+    "tsp-all": "tree-sitter parse examples/**/*.sql --quiet --stat"
   },
   "dependencies": {
     "@duckdb/duckdb-wasm": "^1.29.0",

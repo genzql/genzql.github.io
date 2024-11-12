@@ -1,6 +1,6 @@
 [
   {
-    "type": "alias",
+    "type": "alias_suffix",
     "named": true,
     "fields": {},
     "children": {
@@ -8,31 +8,11 @@
       "required": true,
       "types": [
         {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "column_reference",
-          "named": true
-        },
-        {
-          "type": "function_call",
+          "type": "alias_token",
           "named": true
         },
         {
           "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "parenthesized_expression",
-          "named": true
-        },
-        {
-          "type": "unary_expression",
           "named": true
         }
       ]
@@ -79,6 +59,72 @@
     "fields": {}
   },
   {
+    "type": "column_constraint",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "column_reference",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "table_name",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "column_definition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "column_constraint",
+          "named": true
+        },
+        {
+          "type": "data_type",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "column_reference",
     "named": true,
     "fields": {},
@@ -88,6 +134,79 @@
       "types": [
         {
           "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "create_table_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "column_definition",
+          "named": true
+        },
+        {
+          "type": "table_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "data_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "number",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "delete_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "column_reference",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "table_name",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
           "named": true
         }
       ]
@@ -133,7 +252,92 @@
     }
   },
   {
+    "type": "insert_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "column_reference",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "select_statement",
+          "named": true
+        },
+        {
+          "type": "table_name",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "join_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "join_clause",
+          "named": true
+        },
+        {
+          "type": "join_list",
+          "named": true
+        },
+        {
+          "type": "table_alias",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "join_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "join_table",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "join_table",
     "named": true,
     "fields": {},
     "children": {
@@ -165,7 +369,7 @@
           "named": true
         },
         {
-          "type": "table_name",
+          "type": "table_alias",
           "named": true
         },
         {
@@ -201,6 +405,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "null",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "order_by_element",
@@ -281,7 +490,7 @@
       "required": false,
       "types": [
         {
-          "type": "alias",
+          "type": "alias_suffix",
           "named": true
         },
         {
@@ -317,7 +526,7 @@
           "named": true
         },
         {
-          "type": "table_name",
+          "type": "table_alias",
           "named": true
         },
         {
@@ -337,7 +546,23 @@
       "required": false,
       "types": [
         {
+          "type": "create_table_statement",
+          "named": true
+        },
+        {
+          "type": "delete_statement",
+          "named": true
+        },
+        {
+          "type": "insert_statement",
+          "named": true
+        },
+        {
           "type": "select_statement",
+          "named": true
+        },
+        {
+          "type": "update_statement",
           "named": true
         }
       ]
@@ -347,6 +572,25 @@
     "type": "string",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "table_alias",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "alias_suffix",
+          "named": true
+        },
+        {
+          "type": "table_name",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "table_name",
@@ -393,6 +637,88 @@
         },
         {
           "type": "unary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "update_assignment",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "column_reference",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "update_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "column_reference",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "table_name",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "update_assignment",
           "named": true
         }
       ]
@@ -475,11 +801,15 @@
     "named": false
   },
   {
-    "type": "AS",
+    "type": "ASC",
     "named": false
   },
   {
-    "type": "ASC",
+    "type": "BIGINT",
+    "named": false
+  },
+  {
+    "type": "BOOLEAN",
     "named": false
   },
   {
@@ -487,11 +817,43 @@
     "named": false
   },
   {
+    "type": "CHAR",
+    "named": false
+  },
+  {
+    "type": "CREATE",
+    "named": false
+  },
+  {
+    "type": "DATE",
+    "named": false
+  },
+  {
+    "type": "DECIMAL",
+    "named": false
+  },
+  {
+    "type": "DEFAULT",
+    "named": false
+  },
+  {
+    "type": "DELETE",
+    "named": false
+  },
+  {
     "type": "DESC",
     "named": false
   },
   {
+    "type": "DOUBLE",
+    "named": false
+  },
+  {
     "type": "FALSE",
+    "named": false
+  },
+  {
+    "type": "FLOAT",
     "named": false
   },
   {
@@ -515,6 +877,26 @@
     "named": false
   },
   {
+    "type": "INSERT",
+    "named": false
+  },
+  {
+    "type": "INT",
+    "named": false
+  },
+  {
+    "type": "INTEGER",
+    "named": false
+  },
+  {
+    "type": "INTO",
+    "named": false
+  },
+  {
+    "type": "IS",
+    "named": false
+  },
+  {
     "type": "JOIN",
     "named": false
   },
@@ -523,11 +905,23 @@
     "named": false
   },
   {
+    "type": "LIKE",
+    "named": false
+  },
+  {
     "type": "LIMIT",
     "named": false
   },
   {
     "type": "NOT",
+    "named": false
+  },
+  {
+    "type": "NOT NULL",
+    "named": false
+  },
+  {
+    "type": "NULL",
     "named": false
   },
   {
@@ -547,6 +941,14 @@
     "named": false
   },
   {
+    "type": "PRIMARY KEY",
+    "named": false
+  },
+  {
+    "type": "REFERENCES",
+    "named": false
+  },
+  {
     "type": "RIGHT",
     "named": false
   },
@@ -555,7 +957,43 @@
     "named": false
   },
   {
+    "type": "SET",
+    "named": false
+  },
+  {
+    "type": "SMALLINT",
+    "named": false
+  },
+  {
+    "type": "TABLE",
+    "named": false
+  },
+  {
+    "type": "TEXT",
+    "named": false
+  },
+  {
+    "type": "TIMESTAMP",
+    "named": false
+  },
+  {
     "type": "TRUE",
+    "named": false
+  },
+  {
+    "type": "UNIQUE",
+    "named": false
+  },
+  {
+    "type": "UPDATE",
+    "named": false
+  },
+  {
+    "type": "VALUES",
+    "named": false
+  },
+  {
+    "type": "VARCHAR",
     "named": false
   },
   {
@@ -563,11 +1001,11 @@
     "named": false
   },
   {
-    "type": "identifier",
+    "type": "alias_token",
     "named": true
   },
   {
-    "type": "null",
+    "type": "identifier",
     "named": true
   },
   {
