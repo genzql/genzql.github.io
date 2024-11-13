@@ -13,15 +13,11 @@
   "metadata": {
     "version": "0.1.0",
     "license": "MIT",
-    "description": "Common functionality shared across SQL dialects.",
     "authors": [
       {
         "name": "Vinesh Kannan and Tamjid Rahman"
       }
-    ],
-    "links": {
-      "repository": "https://github.com/tree-sitter/tree-sitter-base_sql"
-    }
+    ]
   },
   "bindings": {
     "c": false,
