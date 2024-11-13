@@ -13,13 +13,15 @@
     "tsb": "tree-sitter build",
     "tsp": "tree-sitter parse",
     "tspa": "tree-sitter parse examples/**/*.sql --quiet --stat",
-    "node-gyp": "node-gyp"
+    "node-gyp": "node-gyp",
+    "render": "node src/scripts/plainRender.js"
   },
   "dependencies": {
     "@duckdb/duckdb-wasm": "^1.29.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tree-sitter": "^0.22.1"
+    "tree-sitter": "^0.22.1",
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
