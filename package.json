@@ -12,14 +12,14 @@
     "tsg": "tree-sitter generate grammars/base_sql/grammar.js",
     "tsb": "tree-sitter build",
     "tsp": "tree-sitter parse",
-    "tsp-all": "tree-sitter parse examples/**/*.sql --quiet --stat"
+    "tsp-all": "tree-sitter parse examples/**/*.sql --quiet --stat",
+    "node-gyp": "node-gyp"
   },
   "dependencies": {
     "@duckdb/duckdb-wasm": "^1.29.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tree-sitter": "^0.22.1",
-    "tree-sitter-cli": "^0.24.4"
+    "tree-sitter": "^0.22.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
@@ -30,6 +30,8 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.9.0",
+    "node-gyp": "^10.2.0",
+    "tree-sitter-cli": "^0.24.4",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0",
     "vite": "^5.4.8"
