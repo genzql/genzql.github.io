@@ -1,13 +1,22 @@
 {
   "grammars": [
     {
-      "name": "base_sql",
+      "name": "basesql",
       "camelcase": "BaseSql",
-      "scope": "source.base_sql",
+      "scope": "source.basesql",
       "file-types": [
         ".sql"
       ],
-      "injection-regex": "^base_sql$"
+      "injection-regex": "^basesql$"
+    },
+    {
+      "name": "postgresql",
+      "camelcase": "PostgreSql",
+      "scope": "source.postgresql",
+      "file-types": [
+        ".psql"
+      ],
+      "injection-regex": "^postgresql$"
     }
   ],
   "metadata": {

@@ -9,10 +9,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "tree-sitter": "tree-sitter",
-    "tsg": "tree-sitter generate grammars/base_sql/grammar.js",
+    "tsg": "tree-sitter generate grammars/basesql/grammar.js && tree-sitter generate grammars/postgresql/grammar.js",
     "tsb": "tree-sitter build",
     "tsp": "tree-sitter parse",
-    "tsp-all": "tree-sitter parse examples/**/*.sql --quiet --stat",
+    "tspa": "tree-sitter parse examples/**/*.sql --quiet --stat",
     "node-gyp": "node-gyp"
   },
   "dependencies": {

@@ -8,7 +8,7 @@
 /// <reference types="tree-sitter-cli/dsl" />
 
 export default grammar({
-  name: "base_sql",
+  name: "basesql",
 
   rules: {
     source_file: ($) => repeat($._statement),
