@@ -7,7 +7,13 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tree-sitter": "tree-sitter",
+    "tsg": "tree-sitter generate grammars/basesql/grammar.js && tree-sitter generate grammars/postgresql/grammar.js",
+    "tsb": "tree-sitter build",
+    "tsp": "tree-sitter parse",
+    "tspa": "tree-sitter parse examples/**/*.sql --quiet --stat",
+    "render": "tsx src/scripts/render.ts"
   },
   "dependencies": {
     "@codemirror/lang-sql": "^6.8.0",
@@ -15,17 +21,22 @@
     "@uiw/react-codemirror": "^4.23.6",
     "code-mirror": "^3.22.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "tree-sitter": "^0.22.1",
+    "tsx": "^4.19.2",
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
+    "@types/yargs": "^17.0.33",
     "@vitejs/plugin-react": "^4.3.2",
     "eslint": "^9.11.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.9.0",
+    "tree-sitter-cli": "^0.24.4",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0",
     "vite": "^5.4.8"

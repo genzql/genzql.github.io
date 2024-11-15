@@ -1,0 +1,39 @@
+{
+  "grammars": [
+    {
+      "name": "basesql",
+      "camelcase": "BaseSql",
+      "scope": "source.basesql",
+      "file-types": [
+        ".sql"
+      ],
+      "injection-regex": "^basesql$"
+    },
+    {
+      "name": "postgresql",
+      "camelcase": "PostgreSql",
+      "scope": "source.postgresql",
+      "file-types": [
+        ".psql"
+      ],
+      "injection-regex": "^postgresql$"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Vinesh Kannan and Tamjid Rahman"
+      }
+    ]
+  },
+  "bindings": {
+    "c": false,
+    "go": false,
+    "node": true,
+    "python": false,
+    "rust": false,
+    "swift": false
+  }
+}

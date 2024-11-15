@@ -134,3 +134,14 @@ out
 
 # Mac OS
 .DS_Store
+
+# Tree Sitter
+src/tree_sitter/**
+src/grammar.json
+src/node-types.json
+src/parser.c
+parser.dylib
+
+# Project
+asts/**
+zqlout/**
