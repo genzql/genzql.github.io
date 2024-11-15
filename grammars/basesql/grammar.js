@@ -11,9 +11,11 @@ export default grammar({
   name: "basesql",
 
   rules: {
-    source_file: ($) => repeat($._statement),
+    source_file: ($) => repeat($.statement),
 
-    _statement: ($) =>
+    terminal: () => token(";"),
+
+    statement: ($) =>
       seq(
         choice(
           $.select_statement,
@@ -22,25 +24,27 @@ export default grammar({
           $.delete_statement,
           $.create_table_statement
         ),
-        optional(";")
+        optional($.terminal)
       ),
+
+    select_token: () => token("SELECT"),
 
     // SELECT statement and its components
     select_statement: ($) =>
       seq(
-        "SELECT",
-        $._select_elements,
-        optional($._from_clause),
-        optional($._where_clause),
-        optional($._group_by_clause),
-        optional($._having_clause),
-        optional($._order_by_clause),
-        optional($._limit_clause)
+        $.select_token,
+        $.select_elements,
+        optional($.from_clause),
+        optional($.where_clause),
+        optional($.group_by_clause),
+        optional($.having_clause),
+        optional($.order_by_clause),
+        optional($.limit_clause)
       ),
 
-    _select_elements: ($) => choice("*", commaSep1($._select_element)),
+    select_elements: ($) => choice("*", commaSep1($.select_element)),
 
-    _select_element: ($) => seq($._expression, optional($.alias_suffix)),
+    select_element: ($) => seq($.expression, optional($.alias_suffix)),
 
     alias_suffix: ($) =>
       choice(
@@ -52,13 +56,15 @@ export default grammar({
 
     alias_token: ($) => token("AS"),
 
-    _from_clause: ($) => seq("FROM", commaSep1($._table_reference)),
+    from_token: () => token("FROM"),
 
-    _table_reference: ($) => choice($.table_alias, $.join_clause),
+    from_clause: ($) => seq($.from_token, commaSep1($.table_reference)),
+
+    table_reference: ($) => choice($.table_alias, $.join_clause),
 
     table_alias: ($) => seq($.table_name, optional($.alias_suffix)),
 
-    join_clause: ($) => prec.left(2, seq($._table_reference, $.join_list)),
+    join_clause: ($) => prec.left(2, seq($.table_reference, $.join_list)),
 
     join_table: ($) =>
       prec.left(
@@ -70,27 +76,26 @@ export default grammar({
             seq("INNER", "JOIN"),
             seq("FULL", optional("OUTER"), "JOIN")
           ),
-          $._table_reference,
+          $.table_reference,
           "ON",
-          $._expression
+          $.expression
         )
       ),
 
     join_list: ($) =>
       prec.left(1, seq($.join_table, optional(seq(",", $.join_table)))),
 
-    _where_clause: ($) => seq("WHERE", $._expression),
+    where_clause: ($) => seq("WHERE", $.expression),
 
-    _group_by_clause: ($) => seq("GROUP", "BY", commaSep1($._expression)),
+    group_by_clause: ($) => seq("GROUP", "BY", commaSep1($.expression)),
 
-    _having_clause: ($) => seq("HAVING", $._expression),
+    having_clause: ($) => seq("HAVING", $.expression),
 
-    _order_by_clause: ($) => seq("ORDER", "BY", commaSep1($.order_by_element)),
+    order_by_clause: ($) => seq("ORDER", "BY", commaSep1($.order_by_element)),
 
-    order_by_element: ($) =>
-      seq($._expression, optional(choice("ASC", "DESC"))),
+    order_by_element: ($) => seq($.expression, optional(choice("ASC", "DESC"))),
 
-    _limit_clause: ($) => seq("LIMIT", $.number),
+    limit_clause: ($) => seq("LIMIT", $.number),
 
     // INSERT statement
     insert_statement: ($) =>
@@ -102,7 +107,7 @@ export default grammar({
           optional(seq("(", commaSep1($.identifier), ")")),
           choice(
             // VALUES syntax
-            seq("VALUES", commaSep1(seq("(", commaSep1($._expression), ")"))),
+            seq("VALUES", commaSep1(seq("(", commaSep1($.expression), ")"))),
             // SELECT syntax
             seq(
               optional(seq("(", commaSep1($.identifier), ")")),
@@ -119,14 +124,14 @@ export default grammar({
         $.table_name,
         "SET",
         commaSep1($.update_assignment),
-        optional($._where_clause)
+        optional($.where_clause)
       ),
 
-    update_assignment: ($) => seq($.identifier, "=", $._expression),
+    update_assignment: ($) => seq($.identifier, "=", $.expression),
 
     // DELETE statement
     delete_statement: ($) =>
-      seq("DELETE", "FROM", $.table_name, optional($._where_clause)),
+      seq("DELETE", "FROM", $.table_name, optional($.where_clause)),
 
     // CREATE TABLE statement
     create_table_statement: ($) =>
@@ -166,12 +171,11 @@ export default grammar({
         "PRIMARY KEY",
         "NOT NULL",
         "UNIQUE",
-        seq("DEFAULT", $._expression),
+        seq("DEFAULT", $.expression),
         seq("REFERENCES", $.table_name, optional(seq("(", $.identifier, ")")))
       ),
 
-    // Basic expressions
-    _expression: ($) =>
+    expression: ($) =>
       prec(
         0,
         choice(
@@ -202,25 +206,25 @@ export default grammar({
           ["*", 5],
           ["/", 5],
         ].map(([operator, precedence]) =>
-          prec.left(precedence, seq($._expression, operator, $._expression))
+          prec.left(precedence, seq($.expression, operator, $.expression))
         ),
-        prec.left(3, seq($._expression, "IS", "NULL")),
-        prec.left(3, seq($._expression, "IS", "NOT", "NULL"))
+        prec.left(3, seq($.expression, "IS", "NULL")),
+        prec.left(3, seq($.expression, "IS", "NOT", "NULL"))
       ),
 
     unary_expression: ($) =>
       choice(
-        prec(6, seq("NOT", $._expression)),
-        prec(6, seq("-", $._expression))
+        prec(6, seq("NOT", $.expression)),
+        prec(6, seq("-", $.expression))
       ),
 
-    parenthesized_expression: ($) => seq("(", $._expression, ")"),
+    parenthesized_expression: ($) => seq("(", $.expression, ")"),
 
     function_call: ($) =>
       seq(
         $.identifier,
         "(",
-        choice("*", optional(commaSep1($._expression))),
+        choice("*", optional(commaSep1($.expression))),
         ")"
       ),
 

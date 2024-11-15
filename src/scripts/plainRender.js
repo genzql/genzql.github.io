@@ -2,6 +2,7 @@
 // import baseSqlRenderer from "../../renderers/basesql/renderer";
 import { createAst } from "../converter/createAst.js";
 import { renderNode } from "../converter/plainRenderer.js";
+import zqlRenderer from "../renderers/zql/renderer.js";
 import fs from "fs";
 
 const argv = {
@@ -16,5 +17,5 @@ const source = fs.readFileSync(argv.source).toString();
 const root = createAst(parsed, source);
 fs.writeFileSync(argv.ast, JSON.stringify(root, undefined, 2));
 
-const zql = renderNode(root, {});
+const zql = renderNode(root, zqlRenderer);
 fs.writeFileSync(argv.out, zql);

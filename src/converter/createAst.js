@@ -5,6 +5,7 @@
 // };
 
 const NEWLINE = "\n";
+const SPACE = " ";
 const EMPTY_CHAR = "";
 
 const OPEN_PAREN = "(";
@@ -42,14 +43,17 @@ function getCumulativeCharsByLine(source) {
   const cumulativeCharsByLine = [];
   for (const line of lines) {
     cumulativeCharsByLine.push(totalChars);
-    totalChars += line.length;
+    // Add one for the newline character.
+    // The last line does not get counted because we only store
+    // cumulative characters before each line.
+    totalChars += line.length + 1;
   }
   return cumulativeCharsByLine;
 }
 
 function getRangeForSource(element, cumulativeCharsByLine) {
   const start = cumulativeCharsByLine[element.start.line] + element.start.char;
-  const end = cumulativeCharsByLine[element.end.line] + element.end.char + 1;
+  const end = cumulativeCharsByLine[element.end.line] + element.end.char;
   return { start, end };
 }
 
@@ -61,11 +65,50 @@ function extractSource(element, source, cumulativeCharsByLine) {
 
 function parseNode(line, source, cumulativeCharsByLine) {
   const element = parseElement(line);
+  const { name, start, end } = element;
   return {
-    name: element.name,
+    name: name,
+    range: { start, end },
     source: extractSource(element, source, cumulativeCharsByLine),
     children: [],
   };
+}
+
+function addWhitespaceNodes(siblings) {
+  if (siblings.length === 0) {
+    return [];
+  }
+  const allNodes = [siblings[0]];
+  for (let i = 1; i < siblings.length; i++) {
+    const previousNode = siblings[i - 1];
+    const node = siblings[i];
+    const lineDiff = node.range.start.line - previousNode.range.end.line;
+    const sameLineCharDiff =
+      node.range.start.char - previousNode.range.end.char;
+    if (lineDiff === 0) {
+      if (sameLineCharDiff > 0) {
+        allNodes.push({
+          name: "space",
+          source: Array(sameLineCharDiff).fill(SPACE).join(EMPTY_CHAR),
+          children: [],
+        });
+      }
+    } else {
+      for (let j = 0; j < lineDiff; j++) {
+        allNodes.push({
+          name: "newline",
+          range: {
+            start: previousNode.range.end,
+            end: { line: previousNode.range.end.line + 1, char: 0 },
+          },
+          source: NEWLINE,
+          children: [],
+        });
+      }
+    }
+    allNodes.push(node);
+  }
+  return allNodes;
 }
 
 function getNumberOfLevelsResolved(line) {
@@ -78,23 +121,6 @@ function getNumberOfLevelsResolved(line) {
   return Math.max(levels, 0);
 }
 
-function findChildren(parent, records) {
-  const children = [];
-  const rest = [];
-  let hasChildren = true;
-  for (const record of records) {
-    if (record.level <= parent.level) {
-      hasChildren = false;
-    }
-    if (hasChildren) {
-      children.push(record);
-    } else {
-      rest.push(record);
-    }
-  }
-  return [children, rest];
-}
-
 function accumulateTreeLevel(dfsNodes) {
   if (dfsNodes.length === 0) {
     return [];
@@ -103,19 +129,30 @@ function accumulateTreeLevel(dfsNodes) {
     return [dfsNodes[0].node];
   }
 
-  const level = [];
-  let remaining = dfsNodes;
-  while (remaining.length > 0) {
-    const [root, ...tree] = remaining;
-    if (tree.length > 0) {
-      const [children, rest] = findChildren(root, tree);
-      const level = accumulateTreeLevel(children);
-      root.node.children = level;
-      remaining = rest;
+  const firstNode = dfsNodes[0];
+  const currentLevel = firstNode.level;
+  const levelNodes = [];
+  let currentParent = null;
+  let currentDescendants = [];
+  for (let i = 0; i < dfsNodes.length; i++) {
+    const node = dfsNodes[i];
+    if (node.level === currentLevel) {
+      if (currentParent != null) {
+        currentParent.children = accumulateTreeLevel(currentDescendants);
+        levelNodes.push(currentParent);
+        currentDescendants = [];
+      }
+      currentParent = node.node;
+    } else {
+      currentDescendants.push(node);
     }
-    level.push(root.node);
   }
-  return level;
+  if (currentParent != null) {
+    currentParent.children = accumulateTreeLevel(currentDescendants);
+    levelNodes.push(currentParent);
+    currentDescendants = [];
+  }
+  return addWhitespaceNodes(levelNodes);
 }
 
 export function createAst(parsed, source) {
