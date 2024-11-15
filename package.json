@@ -17,7 +17,10 @@
     "render": "node src/scripts/plainRender.js"
   },
   "dependencies": {
+    "@codemirror/lang-sql": "^6.8.0",
     "@duckdb/duckdb-wasm": "^1.29.0",
+    "@uiw/react-codemirror": "^4.23.6",
+    "code-mirror": "^3.22.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tree-sitter": "^0.22.1",
