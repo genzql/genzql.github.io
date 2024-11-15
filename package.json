@@ -13,7 +13,6 @@
     "tsb": "tree-sitter build",
     "tsp": "tree-sitter parse",
     "tspa": "tree-sitter parse examples/**/*.sql --quiet --stat",
-    "node-gyp": "node-gyp",
     "render": "node src/scripts/plainRender.js"
   },
   "dependencies": {
@@ -35,7 +34,6 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.9.0",
-    "node-gyp": "^10.2.0",
     "tree-sitter-cli": "^0.24.4",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0",
