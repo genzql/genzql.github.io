@@ -25,12 +25,12 @@ function parseElement(line) {
   const element = {
     name,
     start: {
-      line: start[0],
-      char: start[1],
+      line: parseInt(start[0], 10),
+      char: parseInt(start[1], 10),
     },
     end: {
-      line: end[0],
-      char: end[1],
+      line: parseInt(end[0], 10),
+      char: parseInt(end[1], 10),
     },
   };
   return element;
@@ -49,7 +49,7 @@ function getCumulativeCharsByLine(source) {
 
 function getRangeForSource(element, cumulativeCharsByLine) {
   const start = cumulativeCharsByLine[element.start.line] + element.start.char;
-  const end = cumulativeCharsByLine[element.end.line] + element.end.char;
+  const end = cumulativeCharsByLine[element.end.line] + element.end.char + 1;
   return { start, end };
 }
 
