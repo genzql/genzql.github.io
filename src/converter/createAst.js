@@ -94,17 +94,11 @@ function addWhitespaceNodes(siblings) {
         });
       }
     } else {
-      for (let j = 0; j < lineDiff; j++) {
-        allNodes.push({
-          name: "newline",
-          range: {
-            start: previousNode.range.end,
-            end: { line: previousNode.range.end.line + 1, char: 0 },
-          },
-          source: NEWLINE,
-          children: [],
-        });
-      }
+      allNodes.push({
+        name: "newline",
+        source: Array(lineDiff).fill(NEWLINE).join(EMPTY_CHAR),
+        children: [],
+      });
     }
     allNodes.push(node);
   }
