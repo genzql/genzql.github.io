@@ -13,7 +13,7 @@
     "tsb": "tree-sitter build",
     "tsp": "tree-sitter parse",
     "tspa": "tree-sitter parse examples/**/*.sql --quiet --stat",
-    "render": "node src/scripts/plainRender.js"
+    "render": "tsx src/scripts/render.ts"
   },
   "dependencies": {
     "@codemirror/lang-sql": "^6.8.0",
@@ -23,12 +23,14 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tree-sitter": "^0.22.1",
+    "tsx": "^4.19.2",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
+    "@types/yargs": "^17.0.33",
     "@vitejs/plugin-react": "^4.3.2",
     "eslint": "^9.11.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",

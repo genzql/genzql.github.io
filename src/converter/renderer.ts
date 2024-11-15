@@ -1,8 +1,4 @@
-export type AstNode = {
-  name: string;
-  source: string;
-  children: AstNode[];
-};
+import { AstNode } from "./createAst";
 
 export type RenderFn = (node: AstNode) => string;
 
@@ -10,10 +6,15 @@ export type RendererMap = {
   [key: string]: RenderFn;
 };
 
-export function renderRoot(root: AstNode, rendererMap: RendererMap): string {
-  const render = rendererMap[root.name];
-  if (!render) {
-    throw new Error(`No renderer found for node: ${root.name}`);
+export function renderNode(node: AstNode, rendererMap: RendererMap): string {
+  if (node.children.length > 0) {
+    return node.children.map((c) => renderNode(c, rendererMap)).join("");
   }
-  return render(root);
+
+  const render = rendererMap[node.name];
+  if (render) {
+    return render(node);
+  }
+
+  return node.source;
 }

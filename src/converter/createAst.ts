@@ -1,8 +1,27 @@
-// export type AstNode = {
-//   name: string;
-//   source: string;
-//   children: AstNode[];
-// };
+type SourcePosition = {
+  line: number;
+  char: number;
+};
+
+type AstElement = {
+  name: string;
+  start: SourcePosition;
+  end: SourcePosition;
+};
+
+export type AstNode = {
+  name: string;
+  range: { start: SourcePosition; end: SourcePosition };
+  source: string;
+  children: AstNode[];
+};
+
+type AstNodeContext = {
+  node: AstNode;
+  level: number;
+  isParent: boolean;
+  isLeaf: boolean;
+};
 
 const NEWLINE = "\n";
 const SPACE = " ";
@@ -17,7 +36,7 @@ const NAME_SEP = " [";
 const RANGE_SEP = " - [";
 const LOCATION_SEP = ", ";
 
-function parseElement(line) {
+function parseElement(line: string): AstElement {
   const content = line.trim().slice(1);
   const [nameAndStart, rawEnd] = content.split(RANGE_SEP);
   const [name, rawStart] = nameAndStart.split(NAME_SEP);
@@ -37,7 +56,7 @@ function parseElement(line) {
   return element;
 }
 
-function getCumulativeCharsByLine(source) {
+function getCumulativeCharsByLine(source: string): number[] {
   const lines = source.split(NEWLINE);
   let totalChars = 0;
   const cumulativeCharsByLine = [];
@@ -51,19 +70,30 @@ function getCumulativeCharsByLine(source) {
   return cumulativeCharsByLine;
 }
 
-function getRangeForSource(element, cumulativeCharsByLine) {
+function getRangeForSource(
+  element: AstElement,
+  cumulativeCharsByLine: number[]
+): { start: number; end: number } {
   const start = cumulativeCharsByLine[element.start.line] + element.start.char;
   const end = cumulativeCharsByLine[element.end.line] + element.end.char;
   return { start, end };
 }
 
-function extractSource(element, source, cumulativeCharsByLine) {
+function extractSource(
+  element: AstElement,
+  source: string,
+  cumulativeCharsByLine: number[]
+): string {
   const { start, end } = getRangeForSource(element, cumulativeCharsByLine);
   const segment = source.slice(start, end);
   return segment;
 }
 
-function parseNode(line, source, cumulativeCharsByLine) {
+function parseNode(
+  line: string,
+  source: string,
+  cumulativeCharsByLine: number[]
+): AstNode {
   const element = parseElement(line);
   const { name, start, end } = element;
   return {
@@ -74,7 +104,7 @@ function parseNode(line, source, cumulativeCharsByLine) {
   };
 }
 
-function addWhitespaceNodes(siblings) {
+function addWhitespaceNodes(siblings: AstNode[]): AstNode[] {
   if (siblings.length === 0) {
     return [];
   }
@@ -89,6 +119,10 @@ function addWhitespaceNodes(siblings) {
       if (sameLineCharDiff > 0) {
         allNodes.push({
           name: "space",
+          range: {
+            start: previousNode.range.end,
+            end: node.range.start,
+          },
           source: Array(sameLineCharDiff).fill(SPACE).join(EMPTY_CHAR),
           children: [],
         });
@@ -96,6 +130,10 @@ function addWhitespaceNodes(siblings) {
     } else {
       allNodes.push({
         name: "newline",
+        range: {
+          start: previousNode.range.end,
+          end: node.range.start,
+        },
         source: Array(lineDiff).fill(NEWLINE).join(EMPTY_CHAR),
         children: [],
       });
@@ -105,7 +143,7 @@ function addWhitespaceNodes(siblings) {
   return allNodes;
 }
 
-function getNumberOfLevelsResolved(line) {
+function getNumberOfLevelsResolved(line: string): number {
   const squareParts = line.split(CLOSE_SQUARE);
   const closeParens = squareParts[squareParts.length - 1];
   const pops = closeParens
@@ -115,7 +153,7 @@ function getNumberOfLevelsResolved(line) {
   return Math.max(levels, 0);
 }
 
-function accumulateTreeLevel(dfsNodes) {
+function accumulateTreeLevel(dfsNodes: AstNodeContext[]): AstNode[] {
   if (dfsNodes.length === 0) {
     return [];
   }
@@ -149,7 +187,7 @@ function accumulateTreeLevel(dfsNodes) {
   return addWhitespaceNodes(levelNodes);
 }
 
-export function createAst(parsed, source) {
+export function createAst(parsed: string, source: string): AstNode {
   const parsedLines = parsed.split(NEWLINE);
   const cumulativeCharsByLine = getCumulativeCharsByLine(source);
   const dfsNodes = [];

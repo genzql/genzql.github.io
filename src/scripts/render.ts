@@ -1,19 +1,19 @@
-// import { renderRoot } from "../renderer";
-// import baseSqlRenderer from "../../renderers/basesql/renderer";
-// import yargs from "yargs";
-// import fs from "fs";
+import { createAst } from "../converter/createAst";
+import { renderNode } from "../converter/renderer";
+import zqlRenderer from "../renderers/zql/renderer";
+import * as fs from "fs";
 
-// const argv = yargs
-//   .option("source", {
-//     type: "string",
-//     demandOption: true,
-//   })
-//   .option("renderer", {
-//     type: "string",
-//     default: "basesql",
-//   })
-//   .help().argv;
+const argv = {
+  parsed: "./asts/select_from.ast",
+  source: "./examples/select_from.sql",
+  ast: "./asts/select_from.json",
+  out: "./zqlout/select_from.zql",
+};
 
-// const sourceContents = fs.readFileSync(argv.source);
+const parsed = fs.readFileSync(argv.parsed).toString();
+const source = fs.readFileSync(argv.source).toString();
+const root = createAst(parsed, source);
+fs.writeFileSync(argv.ast, JSON.stringify(root, undefined, 2));
 
-// console.log(sourceContents);
+const zql = renderNode(root, zqlRenderer);
+fs.writeFileSync(argv.out, zql);
